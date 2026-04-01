@@ -32,5 +32,10 @@ def find_contacts(contacts, name) -> list:
 def add_contact():
     pass
 
+
+def delete_contact():
+    pass
+
+
 # test = json_tools.load_json()
 # print(find_contacts(test, "александр"))

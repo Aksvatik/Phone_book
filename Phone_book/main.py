@@ -1,6 +1,8 @@
 import json_tools
 import book_logic
 import utilities
+import sys
+import os
 
 
 MENU = ("1 - Показать все контакты\n"
@@ -34,7 +36,21 @@ while True:
             print("ЕЩЕ НЕ ГОТОВО\n")
 
         case "3":
-            print("ЕЩЕ НЕ ГОТОВО\n")
+            while True:
+                name = input("Введите имя контакта: ").lower().strip()
+                name_list = book_logic.find_contacts(contacts, name)
+                if name_list:
+                    for contact in name_list:
+                        print(book_logic.print_contact(contact))
+                        continue
+                    print("")
+                else:
+                    print("Контакт не найден. Попробуйте еще раз.\n")
+
+                if not utilities.ask_continue("Хотите найти еще один контакт?"):
+                    break
+                else:
+                    pass
 
         case "4":
             print("ЕЩЕ НЕ ГОТОВО\n")
