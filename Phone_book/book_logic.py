@@ -33,9 +33,14 @@ def add_contact():
     pass
 
 
-def delete_contact():
-    pass
+def delete_contact(contacts, name) -> None:
+    for contact in contacts:
+        if contact["name"] == name:
+            contacts.remove(contact)
 
 
 # test = json_tools.load_json()
-# print(find_contacts(test, "александр"))
+# print(test)
+#
+# delete_contact(test, "александр шмелев")
+# print(test)
