@@ -9,24 +9,17 @@ def print_contact(contact) -> str:
     )
 
 
-def find_contacts(contacts, name) -> list:
-    # Поиск точного совпадения
-    exact_matches = []
-    for contact in contacts:
-        if contact["name"] == name:
-            exact_matches.append(contact)
+def find_contacts(contacts, name: list) -> list:
+    if not name:
+        return []
 
-    # Если точное совпадение найдено, вернет его
-    if exact_matches:
-        return exact_matches
+    found_contacts = []
 
-    # Поиск частичных совпадений
-    partial_matches = []
     for contact in contacts:
-        if name in contact["name"]:
-            partial_matches.append(contact)
-    # Возвращает список частичных совпадений, если их нет, то пустой список
-    return partial_matches
+        if all(word in contact["name"] for word in name):
+            found_contacts.append(contact)
+
+    return found_contacts
 
 
 def add_contact():
