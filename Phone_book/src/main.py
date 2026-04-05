@@ -103,8 +103,8 @@ while True:
 
                     # Если найдено частичное совпадение
                     if len(name_list) > 1:
-                        for contact in name_list:
-                            f"{contact + 1}. {book_logic.print_contact(contacts[contact])}"
+                        for contact in range(len(name_list)):
+                            print(f"{contact + 1}. {book_logic.print_contact(name_list[contact])}")
                         print("")
                         continue
                 else:
