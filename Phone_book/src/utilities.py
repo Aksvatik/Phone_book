@@ -20,3 +20,26 @@ def ask_continue(question: str, is_choice=True) -> bool:
 
 def clear_cmd() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def delete_space(string: str) -> str:
+    string = list(string)
+
+    index_space = [i for i in range(len(string) - 1) if string[i] == " "]
+
+    if not index_space:
+        return "".join(string)
+
+    index_space.remove(min(index_space))
+
+    while index_space:
+        string.pop(index_space[0])
+        index_space.pop()
+
+    return "".join(string)
+
+
+def is_quit(var: str) -> bool:
+    if var in ["q", "quit", "й", "йгше", "0", "Q", "Й"]:
+        return True
+    return False

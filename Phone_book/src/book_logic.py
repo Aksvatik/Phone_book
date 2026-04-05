@@ -1,6 +1,3 @@
-# import json_tools
-
-
 def print_contact(contact) -> str:
     return (
         f"{contact['name'].title()}: "
@@ -22,18 +19,15 @@ def find_contacts(contacts, name: list) -> list:
     return found_contacts
 
 
-def add_contact():
-    pass
+def add_contact(contacts: list, name: str, phone: str) -> None:
+    contact = {
+        "name": name,
+        "phone_number": phone
+    }
+    contacts.append(contact)
 
 
 def delete_contact(contacts, name) -> None:
     for contact in contacts:
         if contact["name"] == name:
             contacts.remove(contact)
-
-
-# test = json_tools.load_json()
-# print(test)
-#
-# delete_contact(test, "александр шмелев")
-# print(test)

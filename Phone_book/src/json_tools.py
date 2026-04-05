@@ -2,7 +2,7 @@ import json
 
 
 # Конвертация из json в dict
-def load_json(path="data/contacts.json") -> list:
+def load_json(path="../data/contacts.json") -> list:
     try:
         with open(path, "r", encoding="utf-8") as file:
             return json.load(file)
@@ -11,6 +11,6 @@ def load_json(path="data/contacts.json") -> list:
 
 
 # Конвертация из dict в json
-def dump_json(data: list, path="data/contacts.json") -> None:
+def dump_json(data: list, path="../data/contacts.json") -> None:
     with open(path, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4, ensure_ascii=False)

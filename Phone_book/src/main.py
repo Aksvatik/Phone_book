@@ -3,9 +3,6 @@ import book_logic
 import utilities
 
 
-# Отчистка приглашения командной строки при запуске
-utilities.clear_cmd()
-
 MENU = ("===================== МЕНЮ =====================\n\n"
         "1 - Показать все контакты\n"
         "2 - Добавить новый контакт\n"
@@ -17,6 +14,7 @@ MENU = ("===================== МЕНЮ =====================\n\n"
 contacts = json_tools.load_json()
 
 while True:
+    utilities.clear_cmd()
     print(MENU)
     command = input("Выберите действие: ")
     match command:
@@ -33,17 +31,79 @@ while True:
 
             if not utilities.ask_continue("Нажмите Enter, чтобы продолжить...", False):
                 utilities.clear_cmd()
-                continue
 
-        # Еще не готово
         case "2":
-            utilities.clear_cmd()
-            print("===========ДОБАВЛЕНИЕ НОВОГО КОНТАКТА===========\n")
-            print("ЕЩЕ НЕ ГОТОВО\n")
-
-            if not utilities.ask_continue("Нажмите Enter, чтобы продолжить...", False):
+            while True:
                 utilities.clear_cmd()
-                continue
+                print("=========== ДОБАВЛЕНИЕ НОВОГО КОНТАКТА ===========\n")
+
+                # Ввод имени
+                name = None
+                while True:
+                    tmp_name = input("Введите имя контакта (для выхода введите q): ").lower().strip()
+                    print("")
+
+                    # Выход без создания контакта
+                    if utilities.is_quit(tmp_name):
+                        name = None
+                        break
+
+                    name = utilities.delete_space(tmp_name)
+
+                    if not name:
+                        continue
+                    break
+
+                # Выход в меню
+                if name is None:
+                    break
+
+                # Проверка на точное совпадение имени
+                name_list = book_logic.find_contacts(contacts, name.split())
+
+                if len(name_list) == 1:
+                    print(
+                        f"Такое имя контакта уже существует:\n"
+                        f"{book_logic.print_contact(name_list[0])}\n"
+                    )
+                    if not utilities.ask_continue("Вы уверены, что хотите продолжить создание контакта?"):
+                        break
+
+                # Ввод телефона
+                phone = None
+                while True:
+                    tmp_phone = input("Введите номер телефона (для выхода введите q): +7").strip()
+                    print("")
+
+                    # Выход без создания контакта
+                    if utilities.is_quit(tmp_phone):
+                        phone = None
+                        break
+
+                    if not tmp_phone or not tmp_phone.isnumeric() or len(tmp_phone) != 10:
+                        print("Некорректный номер телефона. Попробуйте еще раз.\n")
+                        continue
+
+                    if any(c["phone_number"] == tmp_phone for c in contacts):
+                        print("Контакт с таким номером уже существует.\n")
+                        input("Нажмите Enter, чтобы продолжить...")
+                        print("")
+                        phone = None
+                        break
+
+                    phone = tmp_phone
+                    break
+
+                if phone is None:
+                    break
+
+                book_logic.add_contact(contacts, name, phone)
+                print(f"\nКонтакт {name.title()} успешно добавлен.\n")
+
+                # Вопрос о продолжении
+                if not utilities.ask_continue("Хотите добавить еще один контакт?"):
+                    utilities.clear_cmd()
+                    break
 
         case "3":
             while True:
@@ -53,8 +113,7 @@ while True:
                 name = input("Введите имя контакта (для выхода введите - q): ").lower().strip()
 
                 # Выход без поиска контакта
-                if name in ["q", "quit", "й", "йгше", "0"]:
-                    utilities.clear_cmd()
+                if utilities.is_quit(name):
                     break
 
                 print("")
@@ -69,13 +128,10 @@ while True:
                 else:
                     print("Контакт не найден. Попробуйте еще раз.\n")
 
-                # Вопрос перед выходом
-                if not utilities.ask_continue("Хотите найти еще один контакт?"):
+                # Вопрос о продолжении
+                if not utilities.ask_continue("Хотите добавить еще один контакт?"):
                     utilities.clear_cmd()
                     break
-                else:
-                    utilities.clear_cmd()
-                    pass
 
         case "4":
             utilities.clear_cmd()
@@ -85,8 +141,7 @@ while True:
                 name = input("Введите имя контакта (для выхода введите - q): ").lower().strip()
 
                 # Выход без удаления контакта
-                if name in ["q", "quit", "й", "йгше", "0"]:
-                    utilities.clear_cmd()
+                if utilities.is_quit(name):
                     break
 
                 print("")
@@ -111,13 +166,10 @@ while True:
                     print("Контакт не найден. Попробуйте еще раз.\n")
                     continue
 
-                # Вопрос перед выходом
+                # Вопрос о продолжении
                 if not utilities.ask_continue("Хотите удалить еще один контакт?"):
                     utilities.clear_cmd()
                     break
-                else:
-                    print("")
-                    pass
 
         case "0" | "q" | "й":
             # Сохранение контактов
@@ -125,4 +177,4 @@ while True:
             break
 
         case _:
-            print("Такого действия нет, попробуйте еще раз")
+            pass
